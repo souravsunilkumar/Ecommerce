@@ -13,4 +13,4 @@ setuptools==72.1.0
 sqlparse==0.5.0
 tzdata==2024.1
 urllib3==2.2.2
-gunicorn
+whitenoise==6.8.2
