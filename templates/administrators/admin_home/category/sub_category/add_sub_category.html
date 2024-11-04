@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Add Sub-category</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.category.label_tag }}<br>
+            {{ form.category|add_class:"form-control" }}&nbsp;&nbsp;or &nbsp;&nbsp;<a href="{% url 'add_category' %}" class="btn btn-primary" >Add new Category</a><br><br>
+        </div>
+        <div class="form-group">
+            {{ form.name.label_tag }}<br>
+            {{ form.name|add_class:"form-control" }}<br><br>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+{% endblock %}

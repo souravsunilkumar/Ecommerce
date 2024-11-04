@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_tags %}
+
+{% block content %}
+<h1>Add New Product</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <!-- Product Form -->
+    <fieldset>
+        <legend>Product Details</legend>
+        <div class="form-group">
+            {{ product_form.brand.label_tag }}<br>
+            {{ product_form.brand }} &nbsp; &nbsp;or &nbsp; &nbsp;<a class="btn btn-success" href="{% url 'add_brand' %}">Add new Brand</a>
+            {{ product_form.brand.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.categories.label_tag }}<br>
+            {{ product_form.categories }} &nbsp; &nbsp;or &nbsp; &nbsp;<a class="btn btn-success" href="{% url 'add_sub_category' %}">Add new Sub category</a>
+            {{ product_form.categories.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.colour.label_tag }}<br>
+            {{ product_form.colour }} &nbsp; &nbsp;or &nbsp; &nbsp;<a class="btn btn-success" href="{% url 'add_colour' %}">Add new Colour</a>
+            {{ product_form.colour.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.section.label_tag }}<br>
+            {{ product_form.section }}&nbsp; &nbsp;or &nbsp; &nbsp;<a class="btn btn-success" href="{% url 'add_section' %}">Add new Section</a>
+            {{ product_form.section.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.total_quantity.label_tag }} <br>
+            {{ product_form.total_quantity }}
+            {{ product_form.total_quantity.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.availability.label_tag }}<br>
+            {{ product_form.availability }}
+            {{ product_form.availability.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.featured_image.label_tag }}<br>
+            {{ product_form.featured_image }}
+            {{ product_form.featured_image.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.product_name.label_tag }}<br>
+            {{ product_form.product_name }}
+            {{ product_form.product_name.errors }}<br><br>
+        </div>
+        
+        <div class="form-group">
+            {{ product_form.price.label_tag }}<br>
+            {{ product_form.price }}
+            {{ product_form.price.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.discount.label_tag }}<br>
+            {{ product_form.discount }}
+            {{ product_form.discount.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.tax.label_tag }}<br>
+            {{ product_form.tax }}
+            {{ product_form.tax.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.packing_cost.label_tag }}<br>
+            {{ product_form.packing_cost }}
+            {{ product_form.packing_cost.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.product_information.label_tag }}<br>
+            {{ product_form.product_information }}
+            {{ product_form.product_information.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.model_name.label_tag }}<br>
+            {{ product_form.model_name }}
+            {{ product_form.model_name.errors }}<br><br>
+        </div>
+       
+        <div class="form-group">
+            {{ product_form.tags.label_tag }}<br>
+            {{ product_form.tags }}
+            {{ product_form.tags.errors }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ product_form.description.label_tag }}<br>
+            {{ product_form.description }}
+            {{ product_form.description.errors }}<br><br>
+        </div>
+        
+    </fieldset>
+    
+    <button type="submit">Save Product</button>
+</form>
+<script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('id_product_information', {
+        height: 600, // Increase the height of the editor
+        width: '200%', // Set the width to 100% of the container
+        contentsCss: '{% static "assets/css/custom_ckeditor.css" %}',
+    });
+    CKEDITOR.replace('id_description', {
+        height: 600, // Increase the height of the editor
+        width: '200%', // Set the width to 100% of the container
+        contentsCss: '{% static "assets/css/custom_ckeditor.css" %}'
+    });
+</script>
+
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .form-group .errors {
+        color: red;
+        font-size: 0.9em;
+    }
+
+    fieldset {
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+
+    legend {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+{% endblock %}

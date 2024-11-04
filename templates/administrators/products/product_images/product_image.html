@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Display list of product images grouped by product name in separate tables -->
+{% for product in products_with_images %}
+<table class="table table-bordered" style="margin-bottom: 30px;">
+    <thead>
+        <tr>
+            <th colspan="{{ product.product_image_set.count }}">{{ product.product_name }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for image in product.product_image_set.all %}
+            <td>
+                <div style="text-align: center;">
+                    <img src="{{ image.images.url }}" alt="Image" style="width: 100px; height: auto;">
+                    <div>
+                        <a href="{% url 'edit_product_image' image.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_product_image' image.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </div>
+            </td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+<br>
+{% endfor %}
+
+{% endblock %}

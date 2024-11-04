@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .delivered {
+        color: green;
+    }
+</style>
+
+<section class="cart-area pt-120 pb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Delivery Orders</h2>
+                <form method="get" action="{% url 'delivery_orders' %}">
+                    <div class="input-group mb-3">
+                        <input type="text" name="postcode" class="form-control" placeholder="Enter postcode" value="{{ postcode }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-content table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="product-thumbnail">Images</th>
+                                <th class="cart-product-name">Product</th>
+                                <th class="product-quantity">Quantity</th>
+                                <th class="product-user">User</th>
+                                <th class="product-delivery">Delivery To</th>
+                                <th class="product-phone-email">Phone & Email</th>
+                                <th class="product-payment">Payment Method</th>
+                                <th class="product-total">Total Amount</th>
+                                <th class="product-status">Order Status</th>
+                                <th class="product-date">Date Ordered</th>
+                                <th class="product-action">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td class="product-thumbnail">
+                                    <a href="{{ order.product_image }}">
+                                        <img src="{{ order.product_image }}" alt="" style="width: 100px; height: auto;">
+                                    </a>
+                                </td>
+                                <td class="product-name">{{ order.product_name }}</td>
+                                <td class="product-quantity">{{ order.quantity }}</td>
+                                <td class="product-user">{{ order.user.username }}</td>
+                                <td class="product-delivery">
+                                    {{ order.first_name }} {{ order.last_name }}<br>
+                                    {{ order.address }}<br>
+                                    {{ order.city }}, {{ order.state }}<br>
+                                    {{ order.country }} {{ order.postcode }}
+                                </td>
+                                <td class="product-phone-email">
+                                    Phone: {{ order.phone }}<br>
+                                    Email: {{ order.email }}
+                                </td>
+                                <td class="product-payment">{{ order.payment_method }}</td>
+                                <td class="product-total">₹ {{ order.total_amount_paid }}</td>
+                                <td class="product-status">{{ order.order_status }}</td>
+                                <td class="product-date">{{ order.date_ordered }}</td>
+                                <td class="product-action">
+                                    {% if order.order_status != "Product Delivered" %}
+                                    <form action="{% url 'deliver_order' order.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-primary">Delivery done</button>
+                                    </form>
+                                    {% else %}
+                                    <span class="delivered">Delivered</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

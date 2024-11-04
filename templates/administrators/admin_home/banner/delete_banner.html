@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Delete Banner</h2>
+    <p>Are you sure you want to delete the banner with the following details?</p>
+    <ul>
+        <li><strong>Discount Deal:</strong> {{ banner.Discount_Deal }}</li>
+        <li><strong>Quotes:</strong> {{ banner.Quotes }}</li>
+        <li><strong>Discount:</strong> {{ banner.Discount }}%</li>
+    </ul>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'manage_banners' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

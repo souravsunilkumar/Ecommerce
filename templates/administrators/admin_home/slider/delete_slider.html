@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Are you sure you want to delete this slider?</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ slider.Brand_Name }}</h5>
+            <p class="card-text">Sale: {{ slider.Sale }}%</p>
+            <p class="card-text">Discount: {{ slider.Discount }}%</p>
+        </div>
+    </div>
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirm</button>
+        <a href="{% url 'admin_home' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

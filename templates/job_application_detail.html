@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Job Application Details</h2>
+    <p><strong>Username:</strong> {{ job_application.user.username }}</p>
+    <p><strong>First Name:</strong> {{ job_application.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ job_application.last_name }}</p>
+    <p><strong>Date of Birth:</strong> {{ job_application.date_of_birth }}</p>
+    <p><strong>Email:</strong> {{ job_application.user.email }}</p>
+    <p><strong>Phone Number:</strong> {{ job_application.phone_number }}</p>
+    <p><strong>Address:</strong> {{ job_application.address }}</p>
+    <p><strong>Educational Qualification:</strong> {{ job_application.educational_qualification }}</p>
+    <p><strong>Type of Job:</strong> {{ job_application.get_type_of_job_display }}</p>
+    <form method="post" action="{% url 'accept_job_application' job_application.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Accept Application</button>
+    </form>
+    <form method="post" action="{% url 'reject_job_application' job_application.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Reject Application</button>
+    </form>
+</div>
+{% endblock %}

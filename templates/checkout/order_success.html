@@ -1,0 +1,16 @@
+<!-- checkout/order_success.html -->
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <img src="{% static 'assets/img/order/order_success.gif' %}" alt="">
+            <h2 class="text-success">Order Placed Successfully!</h2>
+            <p>Your order has been placed successfully. Thank you for shopping with us!</p>
+            <a href="{% url 'home' %}" class="btn btn-primary">Go to Home</a>
+            <a href="{% url 'order' %}" class="btn btn-secondary">View My Orders</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

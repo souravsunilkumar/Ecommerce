@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="cart-area pt-120 pb-120">
+    <div class="container">
+       <div class="row">
+          <div class="col-12">
+                <div class="table-content table-responsive">
+                      <table class="table">
+                            <thead>
+                               <tr>
+                                  <th class="product-thumbnail">Images</th>
+                                  <th class="cart-product-name">Product</th>
+                                  <th class="product-price">Unit Price</th>
+                                  <th class="product-quantity">Quantity</th>
+                                  <th class="product-subtotal">Total</th>
+                                  <th class="product-subtotal">Subtotal Amount</th>
+                                  <th class="product-payment">Payment</th>
+                                  <th class="product-status">Order Status</th>
+                                  <th class="product-status">Cancel</th>
+                               </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in order %}
+                               <tr>
+                                  <td class="product-thumbnail"><a href="{{ i.get_absolute_url }}"><img src="{{ i.product_image }}" alt=""></a></td>
+                                  <td class="product-name"><a href="{{ i.get_absolute_url }}">{{ i.product_name }}</a></td>
+                                  <td class="product-price"><span class="amount">₹ {{ i.unit_price }} </span></td>
+                                  <td class="product-quantity">{{ i.quantity }}</td>
+                                  <td class="product-subtotal"><span class="amount">₹ {{ i.total_price }} </span></td>
+                                  <td class="text-success"><span class="amount">₹ {{ i.total_amount_paid }} </span></td>
+                                  <td class="product-payment">{{ i.payment_method }} </td>
+                                  <td class="product-payment">{{ i.order_status }} </td>
+                                  <td class="product-payment">
+                                      {% if i.order_status != "Product Delivered" %}
+                                      <form method="get" action="{% url 'cancel_order' i.id %}">
+                                          <button type="submit" class="btn btn-danger">Cancel Order</button>
+                                      </form>
+                                      {% endif %}
+                                  </td>
+                               </tr>
+                               {% endfor %}
+                            </tbody>
+                      </table>
+                   </div>
+          </div>
+       </div>
+    </div>
+ </section>
+
+{% endblock %}

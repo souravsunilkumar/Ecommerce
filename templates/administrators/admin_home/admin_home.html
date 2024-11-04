@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- slider-area-start -->
+<div class="slider-area">
+    <div class="swiper-container slider__active">
+        <div class="slider-wrapper swiper-wrapper">
+            {% for i in sliders %}
+            <div class="single-slider swiper-slide slider-height d-flex align-items-center"
+                data-background="/{{i.Image}}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-5">
+                            <div class="slider-content">
+                                <div class="slider-top-btn" data-animation="fadeInLeft" data-delay="1.5s">
+                                    <a href="product-details.html" class="st-btn b-radius">{{i.Discount_Deal}}</a>
+                                </div>
+                                <h2 data-animation="fadeInLeft" data-delay="1.7s" class="pt-15 slider-title pb-5">SALE
+                                    {{i.Sale}}% OFF <br> {{i.Brand_Name}}</h2>
+                                <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.9s">Discount {{i.Discount}}%
+                                    On Products & Free Shipping</p>
+                                <div class="slider-bottom-btn mt-75">
+                                    <a data-animation="fadeInUp" data-delay="1.15s" href="{{i.Link}}"
+                                        class="st-btn-b b-radius">Discover now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /single-slider -->
+            {% endfor %}
+
+            <div class="main-slider-paginations"></div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <h2>Manage Sliders</h2>
+    <a href="{% url 'add_slider' %}" class="btn btn-success mb-4">Add Slider</a>
+    <ul class="list-group">
+        {% for slider in sliders %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ slider.Brand_Name }}
+            <span>
+                <a href="{% url 'edit_slider' slider.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'delete_slider' slider.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<!-- slider-area-end -->
+
+<!-- features__area-start -->
+<section class="features__area pt-20">
+    <div class="container">
+        <div class="row row-cols-xxl-4 row-cols-xl-4 row-cols-lg-4 row-cols-md-2 row-cols-sm-2 row-cols-1 gx-0">
+            <div class="col">
+                <div class="features__item d-flex white-bg">
+                    <div class="features__icon mr-20">
+                        <i class="fal fa-truck"></i>
+                    </div>
+                    <div class="features__content">
+                        <h6>FREE DELIVERY</h6>
+                        <p>For all orders over ₹1000</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="features__item d-flex white-bg">
+                    <div class="features__icon mr-20">
+                        <i class="fal fa-money-check"></i>
+                    </div>
+                    <div class="features__content">
+                        <h6>SAFE PAYMENT</h6>
+                        <p>100% secure payment</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="features__item d-flex white-bg">
+                    <div class="features__icon mr-20">
+                        <i class="fal fa-comments-alt"></i>
+                    </div>
+                    <div class="features__content">
+                        <h6>24/7 HELP CENTER</h6>
+                        <p>Delicated 24/7 support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="features__item features__item-last d-flex white-bg">
+                    <div class="features__icon mr-20">
+                        <i class="fad fa-user-headset"></i>
+                    </div>
+                    <div class="features__content">
+                        <h6>FRIENDLY SERVICES</h6>
+                        <p>30 day satisfaction guarantee</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- features__area-end -->
+
+<!-- banner__area-start -->
+<section class="banner__area pt-20 pb-10">
+    <div class="container">
+        <div class="row">
+            {% for i in banners %}
+            <div class="col-xl-4 col-lg-4 col-md-6">
+                <div class="banner__item p-relative w-img mb-30">
+                    <div class="banner__img">
+                        <a href="{% url 'product' %}"><img src="/{{i.image}}" alt=""></a>
+                    </div>
+                    <div class="banner__content">
+                        <h6><a href="product-details.html">{{i.Discount_Deal}} <br>{{i.Quotes}}</a></h6>
+                        <p>Discount {{i.Discount}}% On Products</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<div class="container mt-5">
+    <h2>Manage Banners</h2>
+    <a href="{% url 'add_banner' %}" class="btn btn-success mb-4">Add Banner</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Discount Deal</th>
+                <th>Quotes</th>
+                <th>Discount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for banner in banners %}
+            <tr>
+                <td><img src="/{{ banner.image }}" alt="{{ banner.Quotes }}" style="width: 100px;"></td>
+                <td>{{ banner.Discount_Deal }}</td>
+                <td>{{ banner.Quotes }}</td>
+                <td>{{ banner.Discount }}%</td>
+                <td>
+                    <a href="{% url 'edit_banner' banner.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_banner' banner.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<!-- banner__area-end -->
+<div class="container mt-5">
+    <h2>Manage Categories</h2>
+
+    <!-- Main Categories -->
+    <h3>Main Categories</h3>
+
+    <a href="{% url 'add_main_category' %}" class="btn btn-success mb-4">Add Main Category</a>
+    <form method="GET" action="{% url 'admin_home' %}">
+        <div class="form-group">
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mb-3" name="main_category_query" type="search" placeholder="Search Main Categories" aria-label="Search" value="{{ main_category_query }}" >
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </form>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for main_category in main_category %}
+            <tr>
+                <td>{{ main_category.name }}</td>
+                <td>
+                    <a href="{% url 'edit_main_category' main_category.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_main_category' main_category.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Categories -->
+    <h3>Categories</h3>
+
+<a href="{% url 'add_category' %}" class="btn btn-success mb-4">Add Category</a>
+<form method="GET" action="{% url 'admin_home' %}">
+    <div class="form-group">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mb-3" name="category_query" type="search" placeholder="Search Categories" aria-label="Search" value="{{ category_query }}" >
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</form>
+
+{% for main_cat, categories in grouped_categories.items %}
+    <h4>{{ main_cat }}</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Main Category</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ main_cat }}</td>
+                <td>{{ category.name }}</td>
+                <td>
+                    <a href="{% url 'edit_category' category.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_category' category.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endfor %}
+
+    <!-- Sub Categories -->
+    <h3>Sub Categories</h3>
+
+<a href="{% url 'add_sub_category' %}" class="btn btn-success mb-4">Add Sub Category</a>
+<form method="GET" action="{% url 'admin_home' %}">
+    <div class="form-group">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mb-3" name="sub_category_query" type="search" placeholder="Search Sub Categories" aria-label="Search" value="{{ sub_category_query }}" >
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</form>
+
+{% for main_cat, categories in grouped_sub_categories.items %}
+    <h4>{{ main_cat }}</h4>
+    {% for cat, sub_cats in categories.items %}
+        <h5>{{ cat }}</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Main Category</th>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub_category in sub_cats %}
+                <tr>
+                    <td>{{ sub_category.category.main_category.name }}</td>
+                    <td>{{ sub_category.category.name }}</td>
+                    <td>{{ sub_category.name }}</td>
+                    <td>
+                        <a href="{% url 'edit_sub_category' sub_category.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_sub_category' sub_category.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endfor %}
+</div>
+<div class="container mt-5">
+
+
+
+
+{% endblock %}

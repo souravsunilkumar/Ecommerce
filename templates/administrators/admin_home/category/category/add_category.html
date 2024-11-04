@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Add Category</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.main_category.label_tag }}<br>
+            {{ form.main_category|add_class:"form-control" }}&nbsp;&nbsp;or &nbsp;&nbsp; <a href="{% url 'add_main_category' %}" class="btn btn-primary">Add new Main Category</a><br><br>
+        </div>
+        <div class="form-group">
+            {{ form.name.label_tag }}<br>
+            {{ form.name|add_class:"form-control" }}<br><br>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+{% endblock %}

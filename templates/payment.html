@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+
+<h1>Your Orders</h1>
+{% for i in order %}
+
+
+<img src="{{i.product_image}}" >
+product {{i.product_name}}
+
+{% endfor %}
+
+{% endblock %}

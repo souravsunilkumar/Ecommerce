@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load product_tags %}
+{% block content %}
+
+
+
+<style>
+    input[type=range] {
+        -webkit-appearance: none;
+        width: 100%;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 1000px;
+        height: 5px;
+        background: #FCBE00;
+        border: none;
+        border-radius: 3px;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border: none;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        background: goldenrod;
+        margin-top: -5px;
+    }
+
+    input[type=range]:focus {
+        outline: none;
+    }
+
+    input[type=range]:focus::-webkit-slider-runnable-track {
+        background: #FCBE00;
+    }
+
+    #star {
+        font-size: 15px;
+        color: grey;
+    }
+
+    #check-star {
+        font-size: 15px;
+    }
+    .checked {
+        color: orange;
+    }
+
+</style>
+
+
+
+
+
+<!-- breadcrumb__area-start -->
+<section class="breadcrumb__area box-plr-75">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12">
+                <div class="breadcrumb__wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb__area-end -->
+
+<!-- shop-area-start -->
+<div class="shop-area mb-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-4">
+                <div class="product-widget mb-30">
+                    <h5 class="pt-title">Product categories</h5>
+                    <div class="widget-category-list mt-20">
+                        <div class="widget-category-list mt-20">
+                            {% for i in main_category %}
+                            <div class="single-widget-category" id="accordion-{{ i.id }}">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <a data-toggle="collapse" href="#collapse-{{ i.id }}" aria-expanded="false" aria-controls="collapse-{{ i.id }}">
+                                            <span class="badge pull-right"><i class="bi bi-plus-circle"></i></span>
+                                            <strong class="main-category" style="color: black;">{{ i.name }}</strong>
+                                        </a>
+                                    </div>
+                                    <div id="collapse-{{ i.id }}" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                                {% for c in i.category_set.all %}
+                                                <li class="category">
+                                                    <a data-toggle="collapse" href="#collapse-sub-{{ c.id }}" aria-expanded="false" aria-controls="collapse-sub-{{ c.id }}">
+                                                        <span class="badge pull-right"><i class="bi bi-plus-circle"></i></span>
+                                                        <span style="color:darkblue;">{{ c.name }}</span>
+                                                    </a>
+                                                    <div id="collapse-sub-{{ c.id }}" class="panel-collapse collapse">
+                                                        <div class="panel-body">
+                                                            <ul>
+                                                                {% for s in c.sub_category_set.all %}
+                                                                <li style="text-align: center;">
+                                                                    <a href="?subCategoryID={{ s.id }}">{{ s.name }}<span>({{ s.product_set.all.count }})</span></a>
+                                                                </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="GET" action="{% url 'product' %}">
+                    {% if subCategoryID %}
+                    <input type="hidden" name="subCategoryID" value="{{ subCategoryID }}">
+                    {% endif %}
+                    
+                    <div class="product-widget mb-30">
+                        <h5 class="pt-title">Filter By Price</h5>
+                        <div class="price__slider mt-30">
+                            <input type="range" class="multi-range success" style="color:red;" value="{{ FilterPrice }}" min="{{ min_price.price__min }}" max="{{ max_price.price__max }}" id="rangeInput" oninput="maxPrice.value=this.value" width="400px;" />
+                            <div>
+                                <b>₹</b><input type="number" style="border: 0;" id="maxPrice"  name="FilterPrice" onkeyup="rangeInput.value=this.value" value="{{ FilterPrice }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-widget mb-30">
+                        <h5 class="pt-title">Choose Color</h5>
+                        <div class="product__color mt-20">
+                            <ul>
+                                {% for i in colour %}
+                                <li>
+                                    <input type="checkbox" id="colour-{{ i.id }}" name="colourID" value="{{ i.id }}" class="filter-checkbox" {% if i.id|stringformat:"s" in ColourID %}checked{% endif %}>
+                                    <label for="colour-{{ i.id }}" style="background-color: {{ i.code }}; display: inline-block; width: 20px; height: 20px; border: 1px solid #ccc;"></label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+            
+                    <div class="product-widget mb-30">
+                        <h5 class="pt-title">Choose Brand</h5>
+                        <div class="widget-category-list mt-20">
+                            {% for i in brand %}
+                            <div class="single-widget-category">
+                                <input type="checkbox" id="brand-{{ i.id }}" name="brandID" value="{{ i.id }}" class="filter-checkbox" {% if i.id|stringformat:"s" in BrandIDs %}checked{% endif %}>
+                                <label for="brand-{{ i.id }}">{{ i.name }}<span>({{ i.product_set.all.count }})</span></label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary mt-2">Filter</button>
+                </form>
+            </div>
+            <div class="col-xl-9 col-lg-8">
+                <div class="shop-banner mb-30">
+                    
+                </div>
+                <div class="product-lists-top">
+                    <div class="product__filter-wrap">
+                        <div class="row align-items-center">
+                            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                                <div class="product__filter d-sm-flex align-items-center">
+                                    <div class="product__col">
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="FourCol-tab" data-bs-toggle="tab" data-bs-target="#FourCol" type="button" role="tab" aria-controls="FourCol" aria-selected="true">
+                                                    <i class="fal fa-th"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__result pl-60">
+                                        <p>Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} results</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
+                                <div class="product__filter-right d-flex align-items-center justify-content-md-end">
+                                    <div class="product__sorting product__show-no">
+                                        <form method="get" id="itemsPerPageForm">
+                                            <select name="items_per_page" onchange="document.getElementById('itemsPerPageForm').submit();">
+                                                <option value="10" {% if items_per_page == 10 %}selected{% endif %}>10</option>
+                                                <option value="15" {% if items_per_page == 15 %}selected{% endif %}>15</option>
+                                                <option value="20" {% if items_per_page == 20 %}selected{% endif %}>20</option>
+                                                <option value="25" {% if items_per_page == 25 %}selected{% endif %}>25</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if no_products %}
+                <div>
+                    
+                    <div style="text-align: center;">
+                        <img src="{% static 'assets/img/not found.gif' %}" alt="Not Found" style="height: 400px; width:auto;"><br>
+                        <img src="{% static 'assets/img/no products.gif' %}" alt="No Products" style="height: 100px; width: auto;">
+                    </div>
+                    
+                </div>
+                {% else %}
+                <div class="tab-content" id="productGridTabContent">
+                    <div class="tab-pane fade show active" id="FourCol" role="tabpanel" aria-labelledby="FourCol-tab">
+                        <div class="tp-wrapper">
+                            <div class="row g-0" id="filteredProducts">
+                                {% for i in page_obj %}
+                                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item product__item-d">
+                                        <div class="product__thumb fix">
+                                            <div class="product-image w-img">
+                                                <a href="{{ i.get_absolute_url }}">
+                                                    <img src="{{ i.featured_image }}" alt="product" style="height: 300px; object-fit: contain;">
+                                                </a>
+                                            </div>
+                                            <div class="product__offer">
+                                                <span class="discount">{{i.discount}}%</span>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="product__content-3">
+                                            <h6><a href="{{ i.get_absolute_url }}">{{ i.product_name|truncatechars:8 }}</a></h6>
+                                            <div class="rating mb-5">
+                                            {% if i.average_rating > 0 %}
+                                            <i class="fa fa-star {% if i.average_rating  < 1 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                            <i class="fa fa-star {% if i.average_rating  < 2 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                            <i class="fa fa-star {% if i.average_rating  < 3 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                            <i class="fa fa-star {% if i.average_rating  < 4 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                            <i class="fa fa-star {% if i.average_rating  < 5 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                       
+                                            {% else %}
+
+                                            <i class="fa fa-star" id="star"></i>
+                                            <i class="fa fa-star" id="star"></i>
+                                            <i class="fa fa-star" id="star"></i>
+                                            <i class="fa fa-star" id="star"></i>
+                                            <i class="fa fa-star" id="star"></i>
+                                              
+                                            {% endif %}
+                                                <span>  &nbsp;({{ i.review_count }} review{% if i.review_count != 1 %}s{% endif %})</span>
+                                            </div>
+                                            <div class="price mb-10">
+                                                <span>₹{% call_sellprice i.price i.discount %}</span><br>
+                                                <del>₹ {{ i.price }}</del>
+                                            </div>
+                                            <div class="progress mb-5">
+                                                <div class="progress-bar {% if i.availability < 10 %}bg-danger{% else %}bg-success{% endif %}" role="progressbar" style="width: {% progress_bar i.total_quantity i.availability %}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="progress-rate {% if i.availability < 10 %}text-danger{% else %}text-success{% endif %}">
+                                                <span>Available: {{ i.availability }}/{{ i.total_quantity }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="product__add-cart-s text-center">
+                                            {% if i.availability == 0 %}
+                                            <span class="cart-btn product-modal-sidebar-open-btn d-flex align-items-center justify-content-center w-100 bg-secondary">Out of Stock</span>
+                                            {% elif i.categories.category.main_category.name == "Software" %}
+                                            <a href="https://contact.nibhasitsolutions.com/"><span class="cart-btn product-modal-sidebar-open-btn d-flex align-items-center justify-content-center w-100 bg-info">Contact to Purchase</span></a>
+                                            {% else %}
+                                            <a href="{% url 'cart_add' i.id %}" class="cart-btn product-modal-sidebar-open-btn d-flex align-items-center justify-content-center w-100">
+                                                Add to Cart</a>
+                                            {% endif %}
+                                            <button type="button" class="wc-checkout d-flex align-items-center justify-content-center w-100" data-bs-toggle="modal" data-bs-target="#productModalId-{{ forloop.counter }}">
+                                                Quick View
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="basic-pagination pt-20">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="basic-pagination-inner text-center">
+                                    <div class="basic-pagination">
+                                        <nav>
+                                            <ul>
+                                                {% if page_obj.has_previous %}
+                                                <li>
+                                                    <a href="?page=1{% if query %}&query={{ query }}{% endif %}{% if subCategoryID %}&subCategoryID={{ subCategoryID }}{% endif %}{% if FilterPrice %}&FilterPrice={{ FilterPrice }}{% endif %}{% for id in ColourID %}&colourID={{ id }}{% endfor %}{% for id in BrandIDs %}&brandID={{ id }}{% endfor %}&items_per_page={{ items_per_page }}">
+                                                        <i class="fal fa-angle-double-left"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&query={{ query }}{% endif %}{% if subCategoryID %}&subCategoryID={{ subCategoryID }}{% endif %}{% if FilterPrice %}&FilterPrice={{ FilterPrice }}{% endif %}{% for id in ColourID %}&colourID={{ id }}{% endfor %}{% for id in BrandIDs %}&brandID={{ id }}{% endfor %}&items_per_page={{ items_per_page }}">
+                                                        <i class="fal fa-angle-left"></i>
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                                {% for i in page_obj.paginator.page_range %}
+                                                {% if page_obj.number == i %}
+                                                <li class="active"><a href="#">{{ i }}</a></li>
+                                                {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                                                <li>
+                                                    <a href="?page={{ i }}{% if query %}&query={{ query }}{% endif %}{% if subCategoryID %}&subCategoryID={{ subCategoryID }}{% endif %}{% if FilterPrice %}&FilterPrice={{ FilterPrice }}{% endif %}{% for id in ColourID %}&colourID={{ id }}{% endfor %}{% for id in BrandIDs %}&brandID={{ id }}{% endfor %}&items_per_page={{ items_per_page }}">{{ i }}</a>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% if page_obj.has_next %}
+                                                <li>
+                                                    <a href="?page={{ page_obj.next_page_number }}{% if query %}&query={{ query }}{% endif %}{% if subCategoryID %}&subCategoryID={{ subCategoryID }}{% endif %}{% if FilterPrice %}&FilterPrice={{ FilterPrice }}{% endif %}{% for id in ColourID %}&colourID={{ id }}{% endfor %}{% for id in BrandIDs %}&brandID={{ id }}{% endfor %}&items_per_page={{ items_per_page }}">
+                                                        <i class="fal fa-angle-right"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&query={{ query }}{% endif %}{% if subCategoryID %}&subCategoryID={{ subCategoryID }}{% endif %}{% if FilterPrice %}&FilterPrice={{ FilterPrice }}{% endif %}{% for id in ColourID %}&colourID={{ id }}{% endfor %}{% for id in BrandIDs %}&brandID={{ id }}{% endfor %}&items_per_page={{ items_per_page }}">
+                                                        <i class="fal fa-angle-double-right"></i>
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- shop-area-end -->
+
+<!-- shop modal start -->
+
+{% for i in product %}
+<div class="modal fade" id="productModalId-{{forloop.counter}}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered product__modal" role="document">
+        <div class="modal-content">
+            <div class="product__modal-wrapper p-relative">
+                <div class="product__modal-close p-absolute">
+                    <button data-bs-dismiss="modal"><i class="fal fa-times"></i></button>
+                </div>
+                <div class="product__modal-inner">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="product__modal-box">
+                                <div class="tab-content" id="modalTabContent-{{forloop.counter}}">
+                                    <div class="tab-pane fade show active" id="nav{{i.id}}-1" role="tabpanel" aria-labelledby="nav1-tab">
+                                        <div class="product__modal-img w-img">
+                                            <img src="{{i.product_image_set.first.images.url}}" alt="" style="object-fit: contain;">
+                                        </div>
+                                    </div>
+                                    {% for image in i.product_image_set.all %}
+                                    <div class="tab-pane fade" id="nav{{i.id}}-{{image.id}}" role="tabpanel" aria-labelledby="nav{{i.id}}-tab{{image.id}}">
+                                        <div class="product__modal-img w-img">
+                                            <img src="{{image.images.url}}" alt="">
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <ul class="nav nav-tabs" id="modalTab-{{forloop.counter}}" role="tablist">
+                                    {% for image in i.product_image_set.all %}
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="nav{{i.id}}-tab{{image.id}}" data-bs-toggle="tab" data-bs-target="#nav{{i.id}}-{{image.id}}" type="button" role="tab" aria-controls="nav{{i.id}}-{{image.id}}" aria-selected="true">
+                                            <img src="{{image.images.url}}" alt="" style="height: 85px; width: 85px; object-fit: contain;">
+                                        </button>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="product__modal-content">
+                                <h4><a href="{% url 'product' %}">{{i.product_name}} </a></h4>
+                                
+                                <div class="product__price">
+                                    <span>₹{% call_sellprice i.price i.discount %}</span><br>
+                                    <del>₹ {{ i.price }}</del>
+                                </div>
+                                <div class="product__modal-des mt-20 mb-15">
+                                    <ul>
+                                        <li><a href="#">{{i.product_information|safe|truncatechars:600}}.</a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__stock mb-20">
+                                    <span class="mr-10">Availability :</span>
+                                    <span>{{i.availability}} in stock</span>
+                                </div>
+                                
+                                <div class="product__stock mb-30">
+                                    <ul>
+                                        <li><a href="#">
+                                                <span class="sku mr-10"> Model Name </span>
+                                                <span>{{i.model_name}}</span></a>
+                                        </li>
+                                        <li><a href="#">
+                                                <span class="cat mr-10">Categories:</span>
+                                                <span>{{i.categories}}</span></a>
+                                        </li>
+                                        <li><a href="#">
+                                                <span class="tag mr-10">Tags:</span>
+                                                <span> {{i.tags}} </span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!-- shop modal end -->
+{% endblock %}
+

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="notification-area pt-120 pb-120">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Notifications</h2>
+                <ul class="notification-list">
+                    {% for notification in notifications %}
+                    <li class="{% if not notification.is_read %}unread{% endif %}">
+                        {{ notification.message }}
+                    </li>
+                    {% empty %}
+                    <li>No new notifications</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

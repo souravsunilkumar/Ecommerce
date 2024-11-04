@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Colour</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.code.label_tag }}<br>
+            {{ form.code|add_class:"form-control" }}<br>
+        </div>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{% url 'manage_products' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

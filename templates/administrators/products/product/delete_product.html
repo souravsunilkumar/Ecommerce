@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Delete Product</h2>
+    <p>Are you sure you want to delete the product <b>"{{ product.product_name }}"</b>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <p>This action cannot be undone.</p>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'manage_products' %}" class="btn btn-secondary">Cancel</a><br><br>
+    </form>
+</div>
+{% endblock %}

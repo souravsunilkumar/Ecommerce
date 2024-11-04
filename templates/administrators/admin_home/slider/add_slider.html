@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Add Slider</h2>
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.Image.label_tag }}<br>
+            {{ form.Image }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.Discount_Deal.label_tag }}<br>
+            {{ form.Discount_Deal|add_class:"form-control" }}<br><br>
+        </div>
+        <div class="form-group">
+            {{ form.Sale.label_tag }}
+            {{ form.Sale|add_class:"form-control" }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.Brand_Name.label_tag }}
+            {{ form.Brand_Name|add_class:"form-control" }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.Discount.label_tag }}
+            {{ form.Discount|add_class:"form-control" }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.Link.label_tag }}
+            {{ form.Link|add_class:"form-control" }}<br>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+{% endblock %}

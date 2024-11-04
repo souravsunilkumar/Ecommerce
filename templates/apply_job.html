@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Apply for a Job</h2>
+    <form method="post" class="shadow p-4 rounded bg-light">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_first_name">First Name</label>
+            {{ form.first_name|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_last_name">Last Name</label>
+            {{ form.last_name|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_date_of_birth">Date of Birth</label>
+            {{ form.date_of_birth|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_phone_number">Phone Number</label>
+            {{ form.phone_number|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_address">Address</label>
+            {{ form.address|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="id_educational_qualification">Educational Qualification</label>
+            {{ form.educational_qualification|add_class:"form-control" }}
+        </div>
+        <div class="form-group"> <br>
+            <label for="id_type_of_job">Type of Job</label><br>
+            {{ form.type_of_job|add_class:"form-control" }}
+        </div>
+        <br><br>
+        <button type="submit" class="btn btn-primary btn-block mt-3">Apply</button>
+    </form>
+</div>
+{% endblock %}

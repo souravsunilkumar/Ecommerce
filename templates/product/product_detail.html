@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load product_tags %}
+
+{% block content %}
+
+<style>
+    .checked {
+  color: orange;
+}
+
+.rating {
+  margin-top: 40px;
+  border: none;
+  float: left;
+  display: flex;
+  flex-direction: row-reverse;  /* This makes the stars align from left to right */
+}
+
+.rating > label {
+  color: #9C9C9C;
+  font-size: 7px;
+  cursor: pointer;  /* Change float to cursor to make it a pointer when hovered */
+}
+
+.rating > label:before {
+  margin: 5px;
+  font-size: 2em;
+  font-family: FontAwesome;
+  content: "\f005";
+  display: inline-block;
+}
+
+.rating > input {
+  display: none;
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #F79426;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,
+.rating > input:checked ~ label:hover ~ label {
+  color: #FECE31;
+}
+
+#star {
+  font-size: 10px;
+  color: grey;
+}
+
+#check-star {
+  font-size: 10px;
+}
+#star1 {
+  font-size: 20px;
+  color: grey;
+}
+
+#check-star1 {
+  font-size: 20px;
+</style>
+}
+
+<!-- breadcrumb__area-start -->
+<section class="breadcrumb__area box-plr-75">
+    <div class="container">
+        <div class="row">
+            <div class="col-xxl-12">
+                <div class="breadcrumb__wrapper">
+                    <nav aria-label="breadcrumb">
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb__area-end -->
+
+<!-- product-details-start -->
+<div class="product-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="product__details-nav d-sm-flex align-items-start">
+                    <ul class="nav nav-tabs flex-sm-column justify-content-between" id="productThumbTab" role="tablist">
+                        {% for i in product.product_image_set.all %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="thumb{{i.id}}-tab" data-bs-toggle="tab"
+                                data-bs-target="#thumb{{i.id}}" type="button" role="tab" aria-controls="thumb{{i.id}}"
+                                aria-selected="true">
+                                <img src="{{i.images.url}}" alt="" style="height: 85px; width: 85px;">
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="product__details-thumb">
+                        <div class="tab-content" id="productThumbContent">
+                            <div class="tab-pane fade show active" id="thumb" role="tabpanel"
+                                aria-labelledby="thumb-tab">
+                                <div class="product__details-nav-thumb w-img">
+                                    <img src="{{product.product_image_set.first.images.url}}" alt="">
+                                </div>
+                            </div>
+                            {% for i in product.product_image_set.all %}
+                            <div class="tab-pane fade show" id="thumb{{i.id}}" role="tabpanel"
+                                aria-labelledby="thumb{{i.id}}-tab">
+                                <div class="product__details-nav-thumb w-img">
+                                    <img src="{{i.images.url}}" alt="">
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="product__details-content">
+                    <h6>{{product.product_name}} </h6>
+                    <div class="pd-rating mb-10">
+                        {% if product.average_rating > 0 %}
+                                        <i class="fa fa-star {% if product.average_rating  < 1 %} no-checked {% else %} checked {% endif %} " id="check-star1"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 2 %} no-checked {% else %} checked {% endif %} " id="check-star1"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 3 %} no-checked {% else %} checked {% endif %} " id="check-star1"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 4 %} no-checked {% else %} checked {% endif %} " id="check-star1"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 5 %} no-checked {% else %} checked {% endif %} " id="check-star1"></i>
+                                       
+                                        {% else %}
+
+                                        <i class="fa fa-star" id="star1"></i>
+                                        <i class="fa fa-star" id="star1"></i>
+                                        <i class="fa fa-star" id="star1"></i>
+                                        <i class="fa fa-star" id="star1"></i>
+                                        <i class="fa fa-star" id="star1"></i>
+                                              
+                                {% endif %}
+                       
+                    </div><br>
+                    <div class="price mb-10">
+                        <span>₹ {% call_sellprice product.price product.discount %}</span><br>
+                        <del>₹ {{product.price}} </del>
+                    </div>
+                    
+                    <div class="cart-option mb-15">
+                        {% if product.availability == 0 %}
+                        <span class="btn btn-dark">Out of Stock</span>
+                        {% elif product.categories.category.main_category.name == "Software" %}
+                        <a href="https://contact.nibhasitsolutions.com/"><span class="btn btn-info">Contact Us to purchase this software</span></a>
+                        {% else %}
+                        <a href="{% url 'cart_add' product.id %}" class="cart-btn">Add to Cart</a>
+                        {% endif %}
+                        </div>
+                    <div class="features-des mb-20 mt-10">
+                        <ul>
+                            <li>{{product.product_information|safe}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="product-stock mb-20">
+                        {% if product.availability > 10 %}
+                            <h5 class="text-success">Availability: <span>{{ product.availability }}</span></h5>
+                        {% elif product.availability > 0 %}
+                            <h5 class="text-danger">Availability: Hurry up, only<span>{{ product.availability }}</span> &nbsp; left!</h5>
+                        {% else %}
+                            <h5 class="text-danger">Availability: Out of stock</h5>
+                        {% endif %}
+                    </div>
+                    
+                    
+                    <div class="product-tag-area mt-15">
+                        <div class="product_info">
+                            <span class="sku_wrapper">
+                                <span class="title">Model Name </span>
+                                <span class="sku">{{product.model_name}}</span>
+                            </span>
+                            <span class="posted_in">
+                                <span class="title">Categories:</span>
+                                <a href="#">{{product.categories}} </a>
+                            </span>
+                            <span class="tagged_as">
+                                <span class="title">Tags:</span>
+                                <a href="#">{{product.tags}} </a>,
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- product-details-end -->
+
+<!-- product-details-des-start -->
+<div class="product-details-des mt-40 mb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="product__details-des-tab">
+                    <ul class="nav nav-tabs" id="productDesTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="des-tab" data-bs-toggle="tab" data-bs-target="#des"
+                                type="button" role="tab" aria-controls="des" aria-selected="true">Description </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="aditional-tab" data-bs-toggle="tab" data-bs-target="#aditional"
+                                type="button" role="tab" aria-controls="aditional" aria-selected="false">Additional
+                                information</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="review-tab" data-bs-toggle="tab" data-bs-target="#review"
+                                type="button" role="tab" aria-controls="review" aria-selected="false">Reviews ({{ review_count }})
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content" id="prodductDesTaContent">
+            <div class="tab-pane fade active show" id="des" role="tabpanel" aria-labelledby="des-tab">
+                <div class="product__details-des-wrapper">
+                    {{ product.description|safe }}
+                </div>
+            </div>
+            <div class="tab-pane fade" id="aditional" role="tabpanel" aria-labelledby="aditional-tab">
+                <div class="product__desc-info">
+                    <ul>
+                        {% for info in product.additional_information_set.all %}
+                        <li class="spec-detail-item">
+                            <h6 class="spec">{{ info.specification }}</h6>
+                            <span class="detail">{{ info.detail }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
+                <div class="product__details-review">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <div class="review-rate">
+                                <h5>{{ average_rating|floatformat:1 }}</h5>
+                                
+                                
+                                {% if product.average_rating > 0 %}
+                                        <i class="fa fa-star {% if product.average_rating  < 1 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 2 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 3 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 4 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if product.average_rating  < 5 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                       
+                                        {% else %}
+
+                                        <i class="fa fa-star " id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                              
+                                {% endif %}
+                                
+                                
+                                <br><span class="review-count">{{ review_count }} Review</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="review-des-infod">
+                                <h6>{{ review_count }} reviews for "<span>{{ product.product_name }}</span>"</h6>
+                                <div >
+                                    {% for review in reviews %}
+                                    <div class="review-details-content">
+                                        
+                                        <div class="name-date mb-30">
+                                        {% if review.rating > 0 %}
+                                        <i class="fa fa-star {% if review.rating  < 1 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if review.rating  < 2 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if review.rating  < 3 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if review.rating  < 4 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                        <i class="fa fa-star {% if review.rating  < 5 %} no-checked {% else %} checked {% endif %} " id="check-star"></i>
+                                       
+                                        {% else %}
+
+                                        <i class="fa fa-star " id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                        <i class="fa fa-star" id="star"></i>
+                                              &nbsp;<span>No ratings</span>
+                                        {% endif %}
+                                            
+                                            <h6>{{ review.user.username }} – <span>{{ review.date|date:"F j, Y" }}</span></h6>
+                                            <p>{{ review.review }}</p>
+                                        </div>
+                                        
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="product__details-comment ">
+                                <div class="comment-title mb-20">
+                                    <h3>Add a review</h3>
+                                </div>
+                                
+                                <div class="comment-input-box">
+                                    <form action="{% url 'product_detail' product.slug %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group required">
+                                            <div class="rating">
+                        
+                                                <input type="radio" id="star5" name="rating" value="5" />
+                                                <label class="star" for="star5" title="Awesome" aria-hidden="true"></label>
+                                                <input type="radio" id="star4" name="rating" value="4" />
+                                                <label class="star" for="star4" title="Great" aria-hidden="true"></label>
+                                                <input type="radio" id="star3" name="rating" value="3" />
+                                                <label class="star" for="star3" title="Very good" aria-hidden="true"></label>
+                                                <input type="radio" id="star2" name="rating" value="2" />
+                                                <label class="star" for="star2" title="Good" aria-hidden="true"></label>
+                                                <input type="radio" id="star1" name="rating" value="1" />
+                                                <label class="star" for="star1" title="Bad" aria-hidden="true"></label>
+                        
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <br>
+                        
+                        
+                                            <textarea class="comment-textarea" name="item_review" placeholder="write a review" rows="6" cols="50" id="review-text" required></textarea>
+                                            <br>
+                        
+                        
+                                        </div>
+                                        <div class="col-xxl-12">
+                                            <div class="comment-submit">
+                                                <button type="submit" class="cart-btn">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- product-details-des-end -->
+{% endblock %}

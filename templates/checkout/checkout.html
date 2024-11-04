@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cart_tag %}
+{% block content %}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<main>
+    <!-- page-banner-area-start -->
+    <div class="page-banner-area page-banner-height-2"
+        data-background="{% static 'assets/img/banner/page-banner-4.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="page-banner-content text-center">
+                        <h4 class="breadcrumb-title">Checkout</h4>
+                        <div class="breadcrumb-two">
+                            <nav>
+                                <nav class="breadcrumb-trail breadcrumbs">
+                                    <ul class="breadcrumb-menu">
+                                        <li class="breadcrumb-trail">
+                                            <a href="{% url 'home' %}"><span>Home</span></a>
+                                        </li>
+                                        <li class="trail-item">
+                                            <span>Checkout</span>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- page-banner-area-end -->
+
+    <!-- checkout-area-start -->
+    <section class="checkout-area pb-85">
+        <div class="container">
+            <form id="checkout-form" action="{% url 'checkout' %}" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="checkbox-form">
+                            <h3>Billing Details</h3>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="country-select">
+                                        <label>Country <span class="required">*</span></label>
+                                        <select name="country" required>
+                                            <option value="India">India</option>
+                                            <option value="Russia">Russia</option>
+                                            <option value="Bangladesh">Bangladesh</option>
+                                            <option value="Bhutan">Bhutan</option>
+                                            <option value="Nepal">Nepal</option>
+                                            <option value="Pakistan">Pakistan</option>
+                                            <option value="Afghanistan">Afghanistan</option>
+                                            <option value="Sri Lanka">Sri Lanka</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkout-form-list">
+                                        <label>First Name <span class="required">*</span></label>
+                                        <input type="text" placeholder="" value="{{ user.first_name }}" name="first_name">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkout-form-list">
+                                        <label>Last Name <span class="required">*</span></label>
+                                        <input type="text" placeholder="" value="{{ user.last_name }}" name="last_name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="checkout-form-list">
+                                        <label>Address <span class="required">*</span></label>
+                                        <textarea rows="10" name="address" style="width: 100%; height: 200px; padding: 0 20px; color: #333;"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="checkout-form-list">
+                                        <label>Town / City <span class="required">*</span></label>
+                                        <input type="text" placeholder="Town / City" name="city">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkout-form-list">
+                                        <label>State <span class="required">*</span></label>
+                                        <input type="text" placeholder="" name="state">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkout-form-list">
+                                        <label>Postcode / Zip <span class="required">*</span></label>
+                                        <input type="text" placeholder="Postcode / Zip" name="postcode">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkout-form-list">
+                                        <label>Email Address <span class="required">*</span></label>
+                                        <input type="email" placeholder="" value="{{ user.email }}" name="email">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkout-form-list">
+                                        <label>Phone <span class="required">*</span></label>
+                                        <input type="text" placeholder="Phone" name="phone">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="your-order">
+                            <h3>Your order</h3>
+                            <div class="your-order-table table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="product-name">Product</th>
+                                            <th class="product-total" style="text-align: center;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for key, value in request.session.cart.items %}
+                                        <tr class="cart_item">
+                                            <td class="product-name">{{ value.product_name }}<strong class="product-quantity">×{{ value.quantity }} </strong></td>
+                                            <td class="product-total" style="text-align: center;"><span class="amount">₹ {{ value.price | multiply:value.quantity }} </span></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="cart-subtotal">
+                                            <th>Cart Subtotal</th>
+                                            <td style="text-align: center;"><span class="amount">₹ {{ cart_total_amount }} </span></td>
+                                        </tr>
+                                        <tr class="cart-subtotal">
+                                            <th>Packing Cost</th>
+                                            <td style="text-align: center;"><span class="amount">₹ {{ packing_cost }} </span></td>
+                                        </tr>
+                                        <tr class="cart-subtotal">
+                                            <th>Tax</th>
+                                            <td style="text-align: center;"><span class="amount">₹ {{ tax }} </span></td>
+                                        </tr>
+                                        
+                                        <tr class="shipping">
+                                            {% if cart_total_amount > 1000 %}
+                                            <th class="text-success">Shipping</th>
+                                            <td style="text-align: center;">
+                                                <ul>
+                                                    <li>
+                                                        <label class="text-success">Free Shipping:</label>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            {% else %}
+                                            <th>Shipping</th>
+                                            <td style="text-align: center;">
+                                                <ul>
+                                                    <li>
+                                                        <label>₹ 120</label>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr class="order-total">
+                                            <th>Order Total</th>
+                                            <td style="text-align: center;">
+                                                <strong><span class="amount text-danger" id="amount">₹ {{ total_amount_paid }}</span></strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="payment-method">
+                                <!-- <div class="order-button-payment">
+                                    <button type="button" id="rzp-button" class="btn btn-primary tp-btn-h1">Pay Online</button>
+                                </div> -->
+                                <br>
+                                <div class="order-button-payment">
+                                    <button type="submit" id="cod-button" class="btn btn-primary tp-btn-h1">Cash on Delivery</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="payment_method" value="cod" id="payment-method">
+                <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+                <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+                <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+            </form>
+        </div>
+    </section>
+    <!-- checkout-area-end -->
+</main>
+
+<script>
+    document.getElementById('rzp-button').onclick = function(e){
+        var options = {
+            "key": "rzp_test_kMv0jzbnP71F8e", // Enter the Key ID generated from the Dashboard
+            "amount": "{{ payment_order.amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 means 50000 paisa or ₹500.
+            "currency": "{{ payment_order.currency }}",
+            "name": "Super-mart",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": "{{ payment_order.id }}", //This is a sample Order ID. Pass the `id` obtained in the previous step
+            "handler": function (response){
+                document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                document.getElementById('razorpay_signature').value = response.razorpay_signature;
+                document.getElementById('payment-method').value = 'online_payment';
+                document.getElementById('checkout-form').submit();
+            },
+            "prefill": {
+                "name": "{{ user.first_name }} {{ user.last_name }}",
+                "email": "{{ user.email }}",
+                "contact": "{{ user.phone }}"
+            },
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+
+{% endblock %}

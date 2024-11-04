@@ -1,0 +1,176 @@
+<style>
+    .notification-bell {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-bell .notification-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: red; /* Change to your preferred background color */
+    color: white;
+    border-radius: 50%;
+    padding: 2px 2px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.notification-bell i {
+    font-size: 24px; /* Adjust the size of the bell icon */
+}
+
+.icon-container {
+    display: flex;
+    justify-content: center; /* Center the icon and text horizontally */
+    align-items: center;
+    height: 100%; /* Ensure the parent div has a defined height */
+    padding: 2px 2px;
+}
+
+.icon-link {
+    display: flex;
+    flex-direction: column; /* Stack the icon and text vertically */
+    align-items: center; /* Center align the icon and text */
+    text-decoration: none; /* Optional: Remove underline from link */
+    color: inherit; /* Optional: Use inherited color */
+}
+
+.icon-link i {
+    margin-top: 5px;
+    margin-bottom: 5px; /* Adjust spacing between the icon and the text */
+}
+
+
+</style>
+<div class="col-xl-4 col-lg-5 col-md-8 col-sm-9">
+    <div class="header-action">
+        {% if user.is_authenticated %}
+        <div class="block-userlink">
+            <a class="icon-link" href="{% url 'profile' %}">
+                <i class="flaticon-user"></i>
+                <span class="text">
+                    Update Profile </span>
+            </a>
+        </div>
+        <div class="notification">
+            {% if is_admin %}
+            <li>
+                <a href="{% url 'admin_notification' %}">
+                {% if admin_notifications_count > 0 %}
+                <i class="fa fa-bell btn btn-close-white"><span class="notification-count">{{ admin_notifications_count }}</span></i>
+                {% else %}
+                <i class="fa fa-bell btn btn-close-white"></i>
+                {% endif %}
+                </a>
+            </li>
+            {% elif is_delivery %}
+            <li>
+                <a href="{% url 'delivery_notification' %}">
+                    
+                    {% if delivery_notifications_count > 0 %}
+                    <i class="fa fa-bell btn btn-close-white"><span class="notification-count">{{ delivery_notifications_count }}</span></i>
+                    {% else %}
+                    <i class="fa fa-bell btn btn-close-white"></i>
+                    {% endif %}
+                </a>
+            </li>
+            {% elif is_sales %}
+            <li>
+                <a href="{% url 'sales_notification' %}">
+                    <i class="fa fa-bell btn btn-close-white"></i>
+                    {% if sales_notifications_count > 0 %}
+                    <span class="notification-count">{{ sales_notifications_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            {% else %}
+            <li>
+                <a href="{% url 'notification' %}">
+                    <i class="fa fa-bell btn btn-close-white"></i>
+                    {% if delivery_notifications_count > 0 %}
+                    <span class="notification-count">{{ delivery_notifications_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="block-userlink">
+            <a class="icon-link" href="{% url 'login' %}">
+                <i class="flaticon-user"></i>
+                <span class="text">
+                    <span class="sub">Login </span>
+                    My Account </span>
+            </a>
+        </div>
+        {% endif %}
+        
+        <div>
+            {% if user.is_authenticated %}
+                <div class="icon-container">
+                    <a class="icon-link" href="{% url 'logout_confirmation' %}">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        <span class="text">Logout</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       
+        <div class="block-cart action">
+            <a class="icon-link" href="{% url 'cart_detail' %}">
+                <i class="flaticon-shopping-bag"></i>
+                <span class="count">{{request.session.cart|length}}</span>
+                <span class="text">
+                    <span class="sub">Your Cart:</span>
+                    ₹ {{cart_total_amount}}</span>
+            </a>
+            <div class="cart">
+                <div class="cart__mini">
+                    <ul>
+                        <li>
+                            <div class="cart__title">
+                                <h4>Your Cart</h4>
+                                <span>( {{request.session.cart|length}} Item in Cart)</span>
+                            </div>
+                        </li>
+                        {% for key,value in request.session.cart.items %}
+                        <li>
+                            <div
+                                class="cart__item d-flex justify-content-between align-items-center">
+                                <div class="cart__inner d-flex">
+                                    <div class="cart__thumb">
+                                        <a href="{% url 'product' %}">
+                                            <img src="{{value.featured_image}}" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="cart__details">
+                                        <h6><a href="{% url 'product' %}"> {{value.product_name}}</a></h6>
+                                        <div class="cart__price">
+                                            <span>₹ {{value.price}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cart__del">
+                                    <a href="{% url 'item_clear' key %}"><i class="fal fa-times"></i></a>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        <li>
+                            <div
+                                class="cart__sub d-flex justify-content-between align-items-center">
+                                <h6>Subtotal</h6>
+                                <span class="cart__sub-total">₹ {{cart_total_amount}}</span>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="{% url 'cart_detail' %}" class="wc-cart mb-10">View cart</a>
+                            <a href="" class="wc-checkout">Checkout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

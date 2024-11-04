@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Admin Notifications</h2>
+    <ul>
+        {% if notifications %}
+            {% for notification in notifications %}
+                <li>
+                    <a href="{% url 'job_application_detail' notification.job_application.id %}">{{ notification.message }}</a> - {{ notification.created_at }}
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>No new notifications</li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
