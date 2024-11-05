@@ -142,14 +142,14 @@
                     </div><br>
                     <div class="price mb-10">
                         <span>₹ {% call_sellprice product.price product.discount %}</span><br>
-                        <del>₹ {{product.price}} </del>
+                        <span style="font-weight: 90;"><del>₹ {{product.price}} </del></span>
                     </div>
                     
                     <div class="cart-option mb-15">
                         {% if product.availability == 0 %}
                         <span class="btn btn-dark">Out of Stock</span>
                         {% elif product.categories.category.main_category.name == "Software" %}
-                        <a href="https://contact.nibhasitsolutions.com/"><span class="btn btn-info">Contact Us to purchase this software</span></a>
+                        <a href="https://nibhas-it-solutions-awvm871b1asp7jkr.builder-preview.com/"><span class="btn btn-info">Contact Us to purchase this software</span></a>
                         {% else %}
                         <a href="{% url 'cart_add' product.id %}" class="cart-btn">Add to Cart</a>
                         {% endif %}
