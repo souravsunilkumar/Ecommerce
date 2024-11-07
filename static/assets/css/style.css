@@ -1290,33 +1290,27 @@ only screen and (min-width: 576px) and (max-width: 767px),
   color: #16bcdc;
 }
 
-.logo .logo-image img {
-  display: block;
-  max-width: 210px;
-  padding: 5px 0;
+/* General styling for the logo */
+.header__info .logo img {
+  width: 150px; /* Default size */
+  height: auto;
+  max-width: 100%;
 }
 
-@media only screen and (min-width: 576px) and (max-width: 767px) {
-  .logo .logo-image img {
-    max-width: 170px;
+/* Styling for larger screens (desktop) */
+@media (min-width: 768px) {
+  .header__info .logo img {
+      width: 200px; /* Adjust the size for desktop */
   }
 }
 
-@media (max-width: 575px) {
-  .logo .logo-image img {
-    margin-bottom: 25px;
+/* Styling for smaller screens (mobile) */
+@media (max-width: 767px) {
+  .header__info .logo img {
+      width: 80px; /* Adjust the size for mobile */
   }
 }
 
-.logo-3 .logo-image img {
-  width: 180px;
-}
-
-@media only screen and (min-width: 576px) and (max-width: 767px) {
-  .logo-3 .logo-image img {
-    width: 130px;
-  }
-}
 
 .heade-mid-inner {
   padding: 30px 0;

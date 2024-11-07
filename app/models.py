@@ -38,6 +38,14 @@ class banner_area(m.Model):
     def __str__(self):
         return self.Quotes
 
+class course_banner(m.Model):
+    image = m.ImageField(upload_to="media/course_banner_img")
+    Course = m.CharField(max_length=100)
+    Quotes = m.CharField(max_length=100)
+    Link = m.CharField(max_length=200,null=True, blank=True)
+
+    def __str__(self):
+        return self.Course
 
 class Main_category(m.Model):
     name = m.CharField(max_length=100)

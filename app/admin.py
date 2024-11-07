@@ -14,7 +14,8 @@ class Product_Admin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(slider)
-admin.site.register(banner_area)
+admin.site.register(banner_area) 
+admin.site.register(course_banner) 
 admin.site.register(Main_category)
 admin.site.register(Category)
 admin.site.register(Sub_category)

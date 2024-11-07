@@ -30,6 +30,7 @@ def BASE(req):
 def HOME(req):
     sliders=slider.objects.all().order_by('-id')
     banners =banner_area.objects.all().order_by('-id')
+    courses =course_banner.objects.all().order_by('id')
 
     main_category = Main_category.objects.all().order_by('-id')
     product =Product.objects.filter(section__name='Top Deal of The Day')
@@ -40,6 +41,7 @@ def HOME(req):
         'banners':banners,
         'main_category':main_category,
         'product':product,
+        'courses':courses,
     }
 
     return render(req,'main/home.html',context)

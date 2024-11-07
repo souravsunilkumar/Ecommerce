@@ -124,6 +124,38 @@
 </section>
 <!-- banner__area-end -->
 
+<!-- course_banner__area-start -->
+<section class="banner__area pt-20 pb-10">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="section__head d-flex justify-content-between mb-10">
+                    <div class="section__title">
+                        <h5 class="st-titile-d">Training Services</h5><br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for i in courses %}
+            <div class="col-xl-4 col-lg-4 col-md-6">
+                <div class="banner__item p-relative w-img mb-30">
+                    <div class="banner__img">
+                        <a href="{{i.Link}}"><img src="/{{i.image}}" alt=""></a>
+                    </div>
+                    <div class="banner__content">
+                        <h6><a href="{{i.Link}}">{{i.Course}} <br></a></h6>
+                        <h5><a href="{{i.Link}}">{{i.Quotes}}</a></h5>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- course_banner__area-end -->
+
 <!-- topsell__area-start -->
 <section class="topsell__area-1 pt-15">
     <div class="container">
